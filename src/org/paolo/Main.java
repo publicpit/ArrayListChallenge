@@ -8,7 +8,6 @@ public class Main {
 
   private static MobilePhone mobilePhone = new MobilePhone();
 
-
   public static void main(String[] args) {
     // write your code here
     // Create a program that implements a simple mobile phone with the following capabilities.
@@ -24,17 +23,15 @@ public class Main {
     // Be sure not to expose the inner workings of the Arraylist to MobilePhone
     // e.g. no ints, no .get(i) etc
     // MobilePhone should do everything with Contact objects only.
-    int choice = 0;
-    yourChoice(0);
-
+    yourChoice();
   }
 
-  private static void yourChoice(int choice) {
+  private static void yourChoice() {
     printInstructions();
     boolean quit = false;
     while (!quit) {
       System.out.println("Enter your choice: ");
-      choice = scanner.nextInt();
+      int choice = scanner.nextInt();
       scanner.nextLine();
       switch (choice) {
         case 0:
@@ -61,7 +58,7 @@ public class Main {
           break;
         default:
           System.out.println("No correct choice. Enter a number following the instruction...");
-          choice = 0;
+          yourChoice();
           break;
       }
     }
@@ -83,7 +80,7 @@ public class Main {
   }
 
   private static void addContact() {
-  	Contacts contacts = new Contacts();
+    Contacts contacts = new Contacts();
 
     System.out.println("Enter the name");
     String name = scanner.nextLine();
@@ -96,23 +93,63 @@ public class Main {
     mobilePhone.addMobilePhone(contacts);
   }
 
-  private static void modifyContact() {
-      System.out.println("Enter the contact name you want to modify");
-      String name = scanner.nextLine();
-      if(mobilePhone.findContact(name)){
-      	//da completare
-      }
+  private static Contacts modifyContact() {
+    System.out.println("Enter the contact name you want to modify");
+    String name = scanner.nextLine();
 
-      }
-
-
-  private static void removeContact() {}
-
-  private static void searchContact() {
-	  System.out.println("Enter the name to search for");
-	  String name = scanner.nextLine();
-	  mobilePhone.findContact(name);
-
+    if (mobilePhone.findContactFlag(name)) {
+      Contacts modContacts = mobilePhone.findContact(name);
+      modifyingMenu(modContacts);
+      return modContacts;
+    } else {
+      System.out.println("This contact is not present");
+    }
+    return null;
   }
 
+  private static void modifyingMenu(Contacts modContacts) {
+    System.out.println("What do you want to modify?");
+    System.out.println("\nPress ");
+    System.out.println("\t 0  - To modify name.");
+    System.out.println("\t 1  - To modify phoneNumber.");
+    int modifyChoice = scanner.nextInt();
+    scanner.nextLine();
+
+    switch (modifyChoice) {
+      case 0:
+        System.out.println("Enter new name: ");
+        String modName = scanner.nextLine();
+        modContacts.setName(modName);
+        break;
+      case 1:
+        System.out.println("Enter new phoneNumber: ");
+        String modPhoneNumber = scanner.nextLine();
+        modContacts.setPhoneNumber(modPhoneNumber);
+        break;
+      default:
+        break;
+    }
+  }
+
+  private static void removeContact() {
+    System.out.println("Enter the contact name you want to remove");
+    String name = scanner.nextLine();
+    mobilePhone.removeMobileContact(name);
+  }
+
+  private static void searchContact() {
+    System.out.println("Enter the name to search for");
+    String name = scanner.nextLine();
+    if (mobilePhone.findContactFlag(name)) {
+      mobilePhone.findContact(name);
+      System.out.println(
+          "The contact in the list: "
+              + "Name: "
+              + mobilePhone.findContact(name).getName()
+              + " PhoneNumber: "
+              + mobilePhone.findContact(name).getPhoneNumber());
+    } else {
+      System.out.println("The contact is NOT in the list.");
+    }
+  }
 }

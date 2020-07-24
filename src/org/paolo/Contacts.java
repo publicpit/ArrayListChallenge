@@ -8,6 +8,9 @@ public class Contacts {
   public Contacts() {
     this("default name", "default phone number");
   }
+	public Contacts(String name) {
+		this(name, "default phone number");
+	}
 
   public Contacts(String name, String phoneNumber) {
     this.name = name;
